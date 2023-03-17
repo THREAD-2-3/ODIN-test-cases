@@ -1,0 +1,41 @@
+{
+  "Time_Integrator": {
+    "parameters": {
+      "nonlinear_solver": {
+        "parameters": {
+          "abs_tol_f": 1e-5,
+          "abs_tol_c": 1e-5,
+          "linear_solver": {
+            "parameters": {
+              "fill_in_reduction": 2,
+              "max_iter_refinements": 2,
+              "pivot_pertubation": 13,
+              "nonsymmetric_permutation": 1,
+              "weighted_matching": 1
+            },
+            "scheme": "CSR_Pardiso_LU_Solver"
+          },
+          "max_iters": 20,
+          "rel_tol_f": 1e-3,
+          "rel_tol_c": 1e-2
+        },
+        "scheme": "Newton_NL_Solver"
+      },
+      "rho_inf": 0.8,
+      "time_increment": 0.2,
+      "total_time": 30
+    },
+    "scheme": "Generalized_Alpha"
+  },
+  "Viewer": {
+    "name": "HDF5_Viewer",
+    "parameters": {
+      "driver": "STDIO",
+      "chunksize_b": 100000,
+      "compression_enabled": false,
+      "overwrite_existing_file": true,
+      "fname": "beam_right_angle_results.h5"
+    },
+    "save_each_nsteps": 1
+  }
+}
