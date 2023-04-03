@@ -21,20 +21,25 @@ time integration of constrained flexible multibody systems,
 http://dx.doi.org/10.1016/j.mechmachtheory.2011.07.017 ''
 """
 
+#############################################################################
 from odin4py import *
 import numpy as np
 import json
 
 initialize_odin()
-
 args = odin_parser.parse_args()
 
+# Load JSON file 
 json_file = json.load(open("beam_right_angle.json"))
 
+# Create a physical system which is the container for our mechanical system.
 ps = create_physical_system()
 analysis = ps.get_mech_analysis_ref()
 nodes_list = ps.get_nodes_list_ref()
 
+#############################################################################
+# Define beam parameters
+#############################################################################
 params_beam = prepro.BeamParams_EA()
 params_beam.EA = 1e6
 params_beam.GA_1 = 1e6
@@ -53,25 +58,41 @@ beam_props = prepro.create_Beam_Props_from_parameters(params_beam)
 beam_props.with_tg_operator = True
 beam_props.with_geom_stiffness = True
 
+# Element label
 elabel = 0
+
+# Node label
 nlabel = 0
+
+# Number of elements
 nele = 5
+
+# Length of beam
 L = 10
 
-# beam AB
+#############################################################################
+# Beam AB
+#############################################################################
 n_0 = np.array([1, 0, 0])
 b_0 = np.array([0, 0, 1])
+
+# Start and end positions of the beam
 start_point_AB = np.array([0, 0, 0])
 end_point_AB = np.array([L, 0, 0])
 
+# Start node label of beam
 n_beamAB_0 = nlabel
+# Define the bean
 prepro.straight_beam(start_point_AB, end_point_AB, nele, elabel, nlabel, n_0,
                      b_0, beam_props, ps)
 elabel += nele
 nlabel += nele + 1
+# End node label of beam
 n_beamAB_1 = nlabel - 1
 
-# beam BC
+#############################################################################
+# Beam BC
+#############################################################################
 n_0 = np.array([-1, 0, 0])
 b_0 = np.array([0, 0, 1])
 start_point_BC = end_point_AB
@@ -84,16 +105,18 @@ elabel += nele
 nlabel += nele + 1
 n_beamBC_1 = nlabel - 1
 
-# link
+#############################################################################
+# Create rigid link between end of beam AB and start of beam BC
+#############################################################################
 prop_link = RigidLinkProps()
-
 ps.create_element("Rigid_Link", elabel, [n_beamAB_1, n_beamBC_0], prop_link)
 elabel += 1
 
-# Force
+#############################################################################
+# Create point force
+#############################################################################
 prop_pforce = PointForceProps()
 prop_pforce.follower_force = False
-
 
 def force_func(t):
     val = 0
@@ -103,19 +126,22 @@ def force_func(t):
         val = 100 - 50 * t
     return np.array([0, 0, val, 0, 0, 0])
 
-
 prop_pforce.force_func = force_func
 ps.create_element("Point_Force", elabel, [n_beamAB_1], prop_pforce)
 
 elabel += 1
 
-# Essential boundary conditions, basically for the floor
+#############################################################################
+# Essential boundary conditions
+#############################################################################
 bc_clamp = BCValue(0, 0, 0)
 bc = analysis.get_essential_bcs()
 bc.insert(0, BC.Motion,
           [bc_clamp, bc_clamp, bc_clamp, bc_clamp, bc_clamp, bc_clamp])
 
+#############################################################################
 # Time integration
+#############################################################################
 analysis.set_analysis_type(AnalysisType.Dynamic)
 analysis.compute_solution(json_file)
 
