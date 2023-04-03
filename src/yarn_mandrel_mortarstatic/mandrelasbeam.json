@@ -1,0 +1,42 @@
+{
+  "Time_Integrator": {
+    "parameters": {
+      "nonlinear_solver": {
+        "parameters": {
+          "abs_tol_f": 1e-7,
+	  "abs_tol_c": 1e-7,
+          "linear_solver": {
+            "parameters": {
+	      "fill_in_reduction": 3,
+	      "max_iter_refinements": 0,
+	      "pivot_pertubation": 10,
+	      "nonsymmetric_permutation": 1,
+	      "weighted_matching": 1
+	    },
+            "scheme": "CSR_Pardiso_LU_Solver"
+          },
+          "max_iters": 100,
+          "rel_tol_f": 1e-4,
+	  "rel_tol_c": 1e-4
+        },
+        "scheme": "Newton_NL_Solver"
+      },
+      "compute_weighted_gap": true,
+      "time_increment": 0.001,
+      "total_time": 12
+    },
+    "scheme": "Static_Solver"
+  },
+  "Viewer": {
+    "name": "HDF5_Viewer",
+    "parameters": {
+      "driver": "STDIO",
+      "chunksize_b": 100000,
+      "compression_enabled": false,
+      "overwrite_existing_file": true,
+      "fname": "mandrelasbeam.h5"
+    },
+    "save_each_nsteps": 1
+  }
+}
+
