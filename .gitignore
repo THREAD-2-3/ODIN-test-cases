@@ -1,3 +1,22 @@
+# Odin gitignore:
+*~
+.#*
+GTAGS
+GPATH
+GRTAGS
+TAGS
+build_debug
+build_clang
+build
+results
+/.vscode
+.directory
+__pycache__
+__init__.pyc
+.pytest_cache
+.idea
+*.h5
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
