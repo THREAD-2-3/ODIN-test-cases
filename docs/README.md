@@ -1,6 +1,1 @@
-# ODIN-test-cases
-Here are the descriptions and documentation for the code and numerical test setup. Add latex files here.
-
-
-
- 
+Subsections, e.g. descriptionOfCode_beltDrive, will be imported to the global main file. Therefore all text is added to subsections and not to the local main file. The local main file is only used for compiling the files locally. 

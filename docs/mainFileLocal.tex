@@ -1,0 +1,65 @@
+% put here just enough to compile it 
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+% \usepackage{docincludes}
+\usepackage{siunitx}
+
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{todonotes} % use \todo{WP2Leader: xyz} \todo{ESRz: xyz} or \todo[inline]{} for simple notes.
+\usepackage{docincludes} %Added
+\usepackage{mathtools} %Added for \prescript
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\definecolor{deepblack}{rgb}{0,0,0}
+\definecolor{deepblue}{rgb}{0,0,0.8}
+\definecolor{deepred}{rgb}{0.6,0,0.4}
+\definecolor{warningRed}{rgb}{1,0.2,0.2}
+\definecolor{deepgreen}{rgb}{0,0.65,0}
+\definecolor{commentgreen}{rgb}{0.5,0.7,0.5}
+
+
+
+
+
+
+% is the format okay? format?? 
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\title{Odin Multibody Dynamics Code}
+
+\begin{document}
+\begin{titlepage}
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+{\includegraphics*[height=3cm]{figures/thread-logo}}
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.3]{figures/flag_yellow}
+\end{center}
+\vspace*{1.3cm}
+\begin{center}
+\large{\sffamily{This project has received funding from the European Union's Horizon 2020 research and}}\\
+\large{\sffamily{innovation programme under the Marie Sk{\l}odowska-Curie grant agreement No 860124.}}
+\end{center}
+
+\end{titlepage}
+\tableofcontents
+\newpage
+%\input{methods.tex}
+\input{descriptionOfMortarYarnMandrelSim}
+\input{descriptionOfCode_MortarYarnMand}
+\input{descriptionofRigidcontact}
+\input{descriptionofCode_rigidcontact}
+
+\bibliographystyle{ieeetr}
+%\typeout{}
+\bibliography{literature}
+\end{document}
