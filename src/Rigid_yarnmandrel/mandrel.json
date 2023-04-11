@@ -1,0 +1,44 @@
+{
+  "Time_Integrator": {
+    "parameters": {
+      "nonlinear_solver": {
+        "parameters": {
+          "abs_tol_f": 1e-8,
+          "abs_tol_c": 1e-8,
+          "linear_solver": {
+            "parameters": {
+	      "fill_in_reduction": 2,
+	      "max_iter_refinements": 2,
+	      "pivot_pertubation": 13,
+	      "nonsymmetric_permutation": 1,
+	      "weighted_matching": 1
+            },
+            "scheme": "CSR_Pardiso_LU_Solver"
+          },
+          "max_iters": 50,
+          "rel_tol_f": 1e-4,
+          "rel_tol_c": 1e-6
+        },
+        "scheme": "Newton_NL_Solver"
+      },
+      "rho_inf": 0.0,
+      "time_increment": 0.005,
+      "total_time": 8,
+	"with_gyroscopic_f": true,
+	"with_ext_f": false,
+	"with_damping_f": true
+    },
+    "scheme": "NSGA_GS"
+  },
+  "Viewer": {
+    "name": "HDF5_Viewer",
+      "save_each_nsteps": 1,
+    "parameters": {
+      "driver": "STDIO",
+      "chunksize_b": 100000,
+      "compression_enabled": false,
+      "overwrite_existing_file": true,
+      "fname": "simulation_results.h5"
+    }
+  }
+}

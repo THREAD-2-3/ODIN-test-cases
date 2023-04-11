@@ -52,7 +52,7 @@ r = 0.002 #m (Yarn radius = 1mm)
 ang_1 = 70
 
 l_beam = 5
-nele_AB = 36
+nele_AB = 40
 start_point_AB = np.array([-mandrel_length/2, mandrel_rad * np.cos(ang_1), mandrel_rad * np.sin(ang_1)])
 end_point_AB = np.array([l_beam, r_trajectory, mandrel_rad])
 deg_ele = -1
@@ -95,9 +95,9 @@ b_0 = np.array([0, 0, 1])
 
 prepro.straight_beam(start_point_AB, end_point_AB, nele_AB, elabel, nlabel,
                      n_0, b_0, beamAB_props, ps)
-elabel += nele_AB # 1 + 36 = 37
-nlabel += nele_AB # 36
-n_beamAB_1 = nlabel #36        # End node of beam AB
+elabel += nele_AB 
+nlabel += nele_AB 
+n_beamAB_1 = nlabel         # End node of beam AB
 
 #--------------------------------------------------------------------------------
 # Defining PWL (Piecewise Linear Functions) for essential boundary conditions
@@ -164,7 +164,7 @@ bc.insert(n_beamAB_1, BC.Motion,
 #################################################################################################
 r_2 = mandrel_rad #m (Yarn radius = 1mm)
 l_beam_2 = mandrel_length
-nele_BC = 36
+nele_BC = 40
 start_point_BC = np.array([-mandrel_length/2, 0, 0])
 end_point_BC = np.array([l_beam_2, 0, 0])
 deg_ele = -1
@@ -174,7 +174,7 @@ E_1 = 200e9
 mu_1 = 0.3
 G_1 = E_1 / (2 * (1 + mu))
 I = 0.25 * 3.141516 #* r**2
-rho = 1.6e3
+rho = 7.75e3
 
 params_beamAB = prepro.BeamParams_EA()
 params_beamAB.EA = E_1 * A_1     # Traction stiffness: N
@@ -195,14 +195,14 @@ beam_props.with_tg_operator = False
 beam_props.with_geom_stiffness = True
 beam_props.damping_coeff = 0.01
 
-nlabel += 1 #36+1 = 37
-start_b2 = nlabel #37
+nlabel += 1 
+start_b2 = nlabel 
 
 prepro.straight_beam(start_point_BC, end_point_BC, nele_BC, elabel, start_b2,
                      n_0, b_0, beam_props, ps)
-elabel += nele_BC #37+35 = 72
-nlabel += nele_BC  #37+35+1 = 72
-n_beamAB_2 = nlabel #72
+elabel += nele_BC 
+nlabel += nele_BC 
+n_beamAB_2 = nlabel
 
 # Clamp beam 2 on both sides
 bc.insert(start_b2, BC.Motion,
@@ -211,7 +211,7 @@ bc.insert(n_beamAB_2, BC.Motion,
             [bc_clamp, bc_clamp, bc_clamp, bc_clamp, bc_clamp, bc_clamp])
 
 ################################################################################################
-# BEAM - 2 (slender yarn)
+# BEAM - 3 (slender yarn)
 ################################################################################################
 r_trajectory_2 = -2
 
@@ -234,9 +234,9 @@ elabel += 1 #1
 
 prepro.straight_beam(start_point_BC, end_point_BC, nele_AB, elabel, nlabel,
                      n_0, b_0, beamAB_props, ps)
-elabel += nele_AB # 1 + 36 = 37
-nlabel += nele_AB # 36
-n_beamAB_1_1 = nlabel #36        # End node of beam AB
+elabel += nele_AB
+nlabel += nele_AB 
+n_beamAB_1_1 = nlabel        # End node of beam AB
 
 # Opposite circular motion
 def x_func_2(t):
