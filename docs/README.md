@@ -1,1 +1,1 @@
-Subsections, e.g. descriptionOfCode_beltDrive, will be imported to the global main file. Therefore all text is added to subsections and not to the local main file. The local main file is only used for compiling the files locally. 
+For the description of 4 test cases, the individual contributions are arranged in subsections for code description and simulation setup e.g. "descriptionofRigidcontact.tex". This contains the description of the beam-to-rigid body test case along with "descriptionofCode_rigidcontact.tex" which contains the code description and installation.
