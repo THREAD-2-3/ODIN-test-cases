@@ -9,62 +9,61 @@ Odin multibody dynamics research code \cite{odin2022} is written in C++ programm
     \item For defining the circular motion as the boundary condition for yarns, the radius \pythoninline{r_trajectory} is defined along with defining the radius of yarns \pythoninline{r}, length \pythoninline{l_beam} and mandrel dimensions. The number of finite elements to be used are defined as \pythoninline{nele_AB} and \pythoninline{nele_BC} for the yarns and mandrel beam respectively.
     \item The element and node labels are initialized as \pythoninline{elabel = 0} and \pythoninline{nlabel = 0}.
     \item For \pythoninline{nlabel = 0}, a grounded spherical joint has been defined by simply specifying the position of the joint and using the C++ element \pythoninline{Ground_SphericalJ} as :
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            prop_spherical = SphericalJProps()
-            prop_spherical.position = np.array(start_point_AB)
-            ps.create_element("Ground_SphericalJ", elabel, [nlabel],
-                                prop_spherical)
-            elabel += 1 
-        \end{lstlisting}\end{tcolorbox}
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    prop_spherical = SphericalJProps()
+    prop_spherical.position = np.array(start_point_AB)
+    ps.create_element("Ground_SphericalJ", elabel, [nlabel],
+                        prop_spherical)
+    elabel += 1 
+    \end{lstlisting}\end{tcolorbox}
         The elabel has now been incremented using \pythoninline{elabel += 1}. In this way, no massless node is defined.
     \item The material properties and sectional stiffness coefficients of the beam are defined using the variable \pythoninline{params_beam}. 
     \item Using \pythoninline{beamAB_props}, the choice of using a tangent operator and geometric stiffness is defined with \pythoninline{True} or \pythoninline{False} as \pythoninline{beamAB_props.with_tg_operator = False}.
     \item The normal and binormal vectors of the orthonormal triad are defined as \pythoninline{n_0 = np.array([0, 1, 0])} ($Y$-axis) and \pythoninline{b_0 = np.array([0, 0, 1])} ($Z$-axis). Finally the beam is created in the physical system using:
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            prepro.straight_beam(start_point_AB, end_point_AB, 
-            nele_AB, elabel, nlabel, n_0, b_0, beamAB_props, ps)
-            elabel += nele_AB 
-            nlabel += nele_AB 
-            n_beamAB_1 = nlabel
-        \end{lstlisting}\end{tcolorbox}
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    prepro.straight_beam(start_point_AB, end_point_AB, nele_AB, 
+    elabel, nlabel, n_0, b_0, beamAB_props, ps)
+    elabel += nele_AB 
+    nlabel += nele_AB 
+    n_beamAB_1 = nlabel
+    \end{lstlisting}\end{tcolorbox}
         The \pythoninline{elabel} and \pythoninline{nlabel} are further incremented using \pythoninline{nele_AB} and \pythoninline{n_beamAB_1} is specified to label the last node of beam AB (yarn 1).
     \item Essential boundary conditions for circular motion are now defined using piecewise linear functions \pythoninline{PWLFunction()}. The prescribed circular motion is in the $YZ$ plane and therefore the remaining $4$ DoF are clamped. Also, the motion needs to be prescribed at position, velocity and acceleration levels as:
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            bcx = BCValue(bcx_func, bcx_v_func, bcx_a_func)
-            bcy = BCValue(bcy_func, bcy_v_func, bcy_a_func)
-            bc.insert(n_beamAB_1, BC.Motion, [bc_clamp, bcx, 
-            bcy, bc_clamp, bc_clamp, bc_clamp])
-        \end{lstlisting}\end{tcolorbox}
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    bcx = BCValue(bcx_func, bcx_v_func, bcx_a_func)
+    bcy = BCValue(bcy_func, bcy_v_func, bcy_a_func)
+    bc.insert(n_beamAB_1, BC.Motion, [bc_clamp, bcx, bcy, bc_clamp, 
+                                      bc_clamp, bc_clamp])
+    \end{lstlisting}\end{tcolorbox}
     \item The similar structure is followed to define the mandrel as a stocky beam, but with fixed nodes (all $6$ DoF clamped) as:
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            bc.insert(start_b2, BC.Motion, [bc_clamp, bc_clamp, 
-            bc_clamp, bc_clamp, bc_clamp, bc_clamp])
-            bc.insert(n_beamAB_2, BC.Motion, [bc_clamp, 
-            bc_clamp, bc_clamp, bc_clamp, bc_clamp, bc_clamp])
-        \end{lstlisting}\end{tcolorbox}
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    bc.insert(start_b2, BC.Motion, [bc_clamp, bc_clamp, bc_clamp, 
+                                    bc_clamp, bc_clamp, bc_clamp])
+    bc.insert(n_beamAB_2, BC.Motion, [bc_clamp, bc_clamp, bc_clamp, 
+                                      bc_clamp, bc_clamp, bc_clamp])
+    \end{lstlisting}\end{tcolorbox}
     \item The second yarn is defined in the similar structure as \pythoninline{beamAB}, but the circular motion is now in the opposite direction.
     \item Finally, the scaling and penalty parameters for the augmented Lagrangian are defined and the contact pairs are defined according to the convention that the first beam element passed to the contact element is the slave beam. Therefore, the yarn is defined as the slave and the mandrel as the master. Firstly, the contact pairs between the first yarn \pythoninline{nele_AB} and mandrel \pythoninline{nele_BC} are defined as:
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            for i in range(nele_AB):
-                for j in range(nele_BC):
-                    ps.create_element("Beam_Contact", elabel,
-                                      [i, i + 1, j + nele_AB + 1, j +
-                                      nele_BC + 2], contact_prop)
-                    elabel += 1
-        \end{lstlisting}\end{tcolorbox}
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    for i in range(nele_AB):
+        for j in range(nele_BC):
+            ps.create_element("Beam_Contact", elabel,
+                              [i, i + 1, j + nele_AB + 1, j +
+                              nele_BC + 2], contact_prop)
+            elabel += 1
+    \end{lstlisting}\end{tcolorbox}
     \item In a similar manner, the contact pairs are further defined between the mandrel and second yarn, with mandrel defined as master and the yarn as slave.
     \item The specified choice of the analysis scheme (\pythoninline{NonSmoothMortarStatic} is further defined and the mechanical analysis computes the solution using the \pythoninline{JSON} file.
-        \pythonstyle
-        \begin{tcolorbox}\begin{lstlisting}
-            analysis.set_analysis_type(
-                AnalysisType.NonSmoothMortarStatic)
-            analysis.compute_solution(json_file)
-        \end{lstlisting}\end{tcolorbox}    
+    \pythonstyle
+    \begin{tcolorbox}\begin{lstlisting}
+    analysis.set_analysis_type(AnalysisType.NonSmoothMortarStatic)
+    analysis.compute_solution(json_file)
+    \end{lstlisting}\end{tcolorbox}    
 \end{enumerate}
 
 \subsubsection{JSON file}
