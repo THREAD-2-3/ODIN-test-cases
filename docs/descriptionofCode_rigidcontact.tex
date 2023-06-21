@@ -71,3 +71,11 @@ For the installation of Odin, please refer to the code documentation: \url{https
 
 For the installation of So-bogus library, please refer to the documentation: \url{http://gdaviet.fr/doc/bogus/master/doxygen/}. In some cases, the installation of So-bogus might have to be performed manually referring to the documentation. After the successful installation of So-bogus, from the \pythoninline{build} directory in Odin, turn \pythoninline{ON} the CMake option of \pythoninline{WITH_SO_BOGUS} before compiling Odin. Once Odin is compiled and installed with the CMake option \pythoninline{WITH_SO_BOGUS} to \pythoninline{ON}, the python example script can be run. The post-processing file reads an \pythoninline{hdf5} file format which is generated from the simulation. This \pythoninline{.h5} file is further imported into a python script written in \pythoninline{Blender} for the visualization of the simulation using \pythoninline{Pyblender}.
 
+\subsection{Conclusions}
+The research reveals that the friction coefficient plays a significant role in the interaction between yarn and mandrel, with a higher friction coefficient significantly postponing the sliding motion of the center node. 
+With the help of the Pardiso linear solver and a Newton solver it is possible to simulate the complex cross-winding of yarns on the mandrel surface, thus shedding light on the manufacturing process of preforms for resin impregnation in composites. 
+Visualization tools like Blender in post-processing can be made available by storing data in hdf5 files.
+
+
+
+
