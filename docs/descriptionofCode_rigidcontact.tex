@@ -1,11 +1,11 @@
 \subsection{Description of code: beam-to-rigid body contact}
-Odin multibody dynamics research code \cite{odin2022} is written in C++ programming language. The philosophy of Odin relies on the use of nonlinear finite elements to represent the components of a multibody system. This is further accompanied by kinematic or contact constraints. The equations of motion are automatically assembled in Odin based on the specified choice of the mechanical analysis and further solved using the specified time integration scheme.\\
+Odin multibody dynamics research code \cite{odin2022} is written in C++ programming language. The philosophy of Odin relies on the use of nonlinear finite elements to represent the components of a multibody system. This is further accompanied by kinematic or contact constraints. The equations of motion are automatically assembled in Odin based on the specified choice of mechanical analysis and further solved using the specified time integration scheme.\\
 
 \subsubsection{Python code file} 
 \begin{enumerate}
     \item The necessary modules are imported and Odin is initialized using \pythoninline{initialize_odin()}.
     \item The variables for radius of spherical collision geometries \pythoninline{r_sphere}, radius of beam \pythoninline{r}, length \pythoninline{l} and mandrel dimensions are defined.
-    \item The \pythoninline{JSON} file which configures the methods to be used (time integrator, nonlinear solvers etc.) is loaded using \pythoninline{json_file = json.load(open())}.
+    \item The JSON file which configures the methods to be used (time integrator, nonlinear solvers etc.) is loaded using \pythoninline{json_file = json.load(open())}.
     \item A physical system is created which is the master container for all the components of the system, using \pythoninline{ps = create_physical_system()}. Additionally, the mechanical analysis and nodal frames are defined in the physical system. As a nodal frame is defined by translations and rotations, a \pythoninline{Vec3} (vector of 3 components) can be used for defining translations along with quaternions for rotations.
     \item The collision properties (\pythoninline{collision_props}) for rigid body contacts are defined using \pythoninline{RigidBodyContactPropsSet()}. The penalty and scaling parameters are then assigned to the property set along with the coefficients of restitution for normal \pythoninline{e_n}, tangential directions \pythoninline{e_t}, and friction \pythoninline{mu}.
     \item Using the defined  \pythoninline{collision_props}, a collision group for point-to-plane contacts is created as:
@@ -20,7 +20,7 @@ Odin multibody dynamics research code \cite{odin2022} is written in C++ programm
     ground_shape = cs.create_Capsule_Shape(boxd, l)
     sphere_shape = cs.create_Sphere_Shape(r_sphere)
     \end{lstlisting}\end{tcolorbox}
-    where, the \pythoninline{ground_shape} refers to the mandrel geometry defined as a capsule (cylinder) and the \pythoninline{sphere_shape} defines the proxy collision geometries to be attached to the nodes of the beam. For the collision detection, \pythoninline{Bullet} engine is used.
+    where the \pythoninline{ground_shape} refers to the mandrel geometry defined as a capsule (cylinder) and the \pythoninline{sphere_shape} defines the proxy collision geometries to be attached to the nodes of the beam. For collision detection, \pythoninline{Bullet} engine is used.
     \item The material properties and sectional stiffness coefficients of the beam are defined using the variable \pythoninline{params}. Using \pythoninline{beam_props}, the choice of using a tangent operator and geometric stiffness is defined with \pythoninline{True} or \pythoninline{False} as \pythoninline{beam_props.with_tg_operator = False}
     \item The normal (\pythoninline{n_0}) and binormal (\pythoninline{b_0}) vectors of the orthonormal triad are defined.
     \item The beam is created by looping through the number of elements (\pythoninline{num_elems}) and then defining spherical collision elements attached to the node as:
@@ -54,8 +54,8 @@ Odin multibody dynamics research code \cite{odin2022} is written in C++ programm
                             [bc_clamp, bc_clamp, bc_clamp, 
                              bc_clamp, bc_clamp, bc_clamp])
     \end{lstlisting}\end{tcolorbox}
-    The prescribed circular motion is defined for the start node of the beam (\pythoninline{nlabel = 0}). Further, using \pythoninline{BC.Vec_XYZ} which sets the rotation DoF's free, the end node (\pythoninline{n_beamAB_1}) is restrained for translation (3 DoF's only). The mandrel node (\pythoninline{fix_ground}) is fixed (all 6 DoF clamped).        
-    \item The specified choice of the time integration scheme is defined as (\pythoninline{NonSmoothDynamic} and the mechanical analysis computes the solution using the \pythoninline{JSON} file. The specific parameters for the time integration are defined in the \pythoninline{JSON} file.
+    The prescribed circular motion is defined for the start node of the beam (\pythoninline{nlabel = 0}). Further, using \pythoninline{BC.Vec_XYZ} which sets the rotation DoFs free, the end node (\pythoninline{n_beamAB_1}) is restrained for translation (3 DoFs only). The mandrel node (\pythoninline{fix_ground}) is fixed (all 6 DoF clamped).        
+    \item The specified choice of the time integration scheme is defined as (\pythoninline{NonSmoothDynamic} and the mechanical analysis computes the solution using the JSON file. The specific parameters for the time integration are defined in the JSON file.
     \pythonstyle
     \begin{tcolorbox}\begin{lstlisting}
     analysis.set_analysis_type(AnalysisType.NonSmoothDynamic)
@@ -64,17 +64,17 @@ Odin multibody dynamics research code \cite{odin2022} is written in C++ programm
 \end{enumerate}
 
 \subsubsection{JSON file}
-The time integration scheme in the \pythoninline{JSON} file is specified as \pythoninline{NSGA_GS} which identifies as the nonsmooth generalized-$\alpha$ time integration scheme along with the Gau{\ss}-Seidel solver (So-bogus). The maximum iterations are set to 50. The nonlinear solver to be used within the generalized alpha time integrator is set to \pythoninline{Newton_NL_Solver}, which identifies as the Newton Nonlinear solver. As parameters, you have some properties which correspond to the nonlinear solver but also a \pythoninline{linear_solver} that in this case is set to \pythoninline{CSR_Pardiso_Solver}. This means that the direct intel MKL Pardiso solver is going to be used, assuming that the matrices are provided in CSR (Compressed Sparse Row) format. In addition, a component \pythoninline{Viewer} is defined and identified to name: \pythoninline{HDF5_Viewer}.
+The time integration scheme in the JSON file is specified as \pythoninline{NSGA_GS} which identifies as the nonsmooth generalized-$\alpha$ time integration scheme along with the Gau{\ss}-Seidel solver (So-bogus). The maximum iterations are set to 50. The nonlinear solver to be used within the generalized alpha time integrator is set to \pythoninline{Newton_NL_Solver}, which identifies as the Newton Nonlinear solver. As parameters, you have some properties which correspond to the nonlinear solver but also a \pythoninline{linear_solver} that in this case is set to \pythoninline{CSR_Pardiso_Solver}. This means that Intel's MKL Pardiso direct solver is going to be used, assuming that the matrices are provided in CSR (Compressed Sparse Row) format. In addition, a component \pythoninline{Viewer} is defined and identified to name: \pythoninline{HDF5_Viewer}.
 
 \subsection{Installation and running}
-For the installation of Odin, please refer to the code documentation: \url{https://obruls.gitlabpages.uliege.be/doc4odin/firstSteps/index.html}. Odin has the ability to fetch and install the third-party libraries automatically.\\
+For the installation of Odin, please refer to the code documentation: \url{https://obruls.gitlabpages.uliege.be/doc4odin/firstSteps/index.html}. Odin has the ability to fetch and install third-party libraries automatically.\\
 
-For the installation of So-bogus library, please refer to the documentation: \url{http://gdaviet.fr/doc/bogus/master/doxygen/}. In some cases, the installation of So-bogus might have to be performed manually referring to the documentation. After the successful installation of So-bogus, from the \pythoninline{build} directory in Odin, turn \pythoninline{ON} the CMake option of \pythoninline{WITH_SO_BOGUS} before compiling Odin. Once Odin is compiled and installed with the CMake option \pythoninline{WITH_SO_BOGUS} to \pythoninline{ON}, the python example script can be run. The post-processing file reads an \pythoninline{hdf5} file format which is generated from the simulation. This \pythoninline{.h5} file is further imported into a python script written in \pythoninline{Blender} for the visualization of the simulation using \pythoninline{Pyblender}.
+For the installation of the So-bogus library, please refer to the documentation: \url{http://gdaviet.fr/doc/bogus/master/doxygen/}. In some cases, the installation of So-bogus might have to be performed manually referring to the documentation. After the successful installation of So-bogus, from the \pythoninline{build} directory in Odin, turn \pythoninline{ON} the CMake option of \pythoninline{WITH_SO_BOGUS} before compiling Odin. Once Odin is compiled and installed with the CMake option \pythoninline{WITH_SO_BOGUS} to \pythoninline{ON}, the Python example script can be run. The post-processing file reads an HDF5 file format which is generated from the simulation. This \pythoninline{.h5} file is further imported into a Python script written in Blender for the visualization of the simulation using \pythoninline{Pyblender}.
 
 \subsection{Conclusions}
-The research reveals that the friction coefficient plays a significant role in the interaction between yarn and mandrel, with a higher friction coefficient significantly postponing the sliding motion of the center node. 
-With the help of the Pardiso linear solver and a Newton solver it is possible to simulate the complex cross-winding of yarns on the mandrel surface, thus shedding light on the manufacturing process of preforms for resin impregnation in composites. 
-Visualization tools like Blender in post-processing can be made available by storing data in hdf5 files.
+The research reveals that the friction coefficient plays a significant role in the interaction between yarn and mandrel, with a higher friction coefficient significantly postponing the sliding motion of the centre node. 
+With the help of the MKL Pardiso direct solver and a Newton solver, it is possible to simulate the complex cross-winding of yarns on the mandrel surface, thus shedding light on the manufacturing process of preforms for resin impregnation in composites. 
+Visualization tools like Blender in post-processing can be made available by storing data in HDF5 files.
 
 
 

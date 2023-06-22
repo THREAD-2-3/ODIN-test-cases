@@ -153,3 +153,7 @@ dmypy.json
 *.blg
 *.bbl
 *.aux
+/docs/docincludes.sty
+/docs/mainFileLocal.out
+/docs/mainFileLocal.synctex
+/docs/mainFileLocal.toc
