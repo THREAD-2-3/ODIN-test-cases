@@ -15,7 +15,7 @@ The textile yarns are modelled as geometrically exact beams using the Lie group 
 \boldsymbol{\mathrm{0}} \leq \boldsymbol{\lambda} \perp \boldsymbol{\mathrm{g}}^{\textrm{con}} &\geq& \boldsymbol{\mathrm{0}} \label{LCP}
 \eea
 %
-Equation \ref{LCP} represents a linear complementarity problem (LCP) which is further solved using an augmented Lagrangian formulation. 
+Equation (\ref{LCP}) represents a linear complementarity problem (LCP) which is further solved using an augmented Lagrangian formulation. 
 The quantities $\boldsymbol{\mathrm{f}}^{\textrm{int}}$ and $\boldsymbol{\mathrm{f}}^{\textrm{ext}}$ are internal and external force vectors respectively, $\boldsymbol{\mathrm{B}}$ is the constraint gradient, $\boldsymbol{\lambda}$ are the Lagrange multipliers and $q$ is the configuration variable, and $\boldsymbol{\mathrm{g}}^{\textrm{con}}$ is the weighted normal constraints. For element $e$, it is defined as: 
 
 \begin{equation}
@@ -29,7 +29,7 @@ which is defined on the slave beam ($s_1$) along with shape functions $\boldsymb
 A quasi-static frictionless simulation of two beams deposited on the surface of a stocky and fixed beam is performed using Odin multibody dynamics research code \cite{odin2022}. The radius of the slender beam is $r_y = 0.002$ m along with the length $l_y = 5$ m. Similarly, the radius of the stocky beam is $r_m = 0.2\,$m along with length $l_m = 5\,$m. The yarns and mandrel are discretized using 40 beam finite elements and the material properties of basalt fibres are assigned for the yarns as $E = 90\,$GPa, $\nu = 0.21$ and $\rho = 2750\,$kg/m$^3$ and properties of steel assigned to the mandrel i.e. $E = 200\,$GPa, $\nu = 0.3$ and $\rho = 7750\,$kg/m$^3$. A spherical joint is used at the starting positions of the slender beams to allow rotation. On the contrary, the stocky beam is fully constrained using a clamped boundary condition.
 
 \subsubsection{Results}
-The cross-winding of two yarns on the mandrel surface is shown in Figure \ref{testsetup}. For performing the test, an MKL Pardiso linear solver (CSR matrix storage) has been used along with a Newton nonlinear solver for which the maximum iterations is set to 100 and a relative tolerance of $1\mathrm{e}{-4}$ as presented in the configuration JSON file. The simulation is performed for a total time $T = 12$ seconds with a time step size $h = 0.001$. The results are stored in an HDF5 file created, which is further used for post-processing together with Blender for visualization purposes.
+The cross-winding of two yarns on the mandrel surface is shown in Figure \ref{testsetup}. For performing the test, an MKL Pardiso linear solver (CSR matrix storage) has been used along with a Newton nonlinear solver for which the maximum iterations is set to 100 and a relative tolerance of $1\mathrm{e}{-4}$ as presented in the configuration JSON file. The simulation is performed for a total time $T = 12$ s with a time step size $h = 0.001$ s. The results are stored in an HDF5 file created, which is further used for post-processing together with Blender for visualization purposes.
 
 \begin{figure}[h]
     \centering
